@@ -1,3 +1,5 @@
+package utils;
+
 public class Position {
 
     private int x;
