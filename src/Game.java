@@ -1,3 +1,5 @@
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 import board.Board;
@@ -13,6 +15,7 @@ public class Game {
     }
 
     public void play(){
+        printTitleBanner();
         Scanner scanner = new Scanner(System.in);
         while(true){
             board.printBoard();
@@ -46,5 +49,13 @@ public class Game {
     public static void main(String[] args) {
         Game game = new Game(new Board(5));
         game.play();
+    }
+
+    public static void printTitleBanner() {
+        try{
+            System.out.println(new String(Files.readAllBytes(Paths.get("src\\titleBanner.txt"))));
+        } catch(Exception e) {
+            System.out.println("Oh no!\n" + e);
+        }
     }
 }
