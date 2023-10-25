@@ -1,12 +1,10 @@
 package src.chars;
 
 public class Player extends Character {
-    // protected int position;
-    // protected String name;  
-    // protected char symbol; 
-
-    // Getters & setters
-    public String getName() {
-        return "Donald";
+    // Constructor
+    public Player(int position) {
+        this.position = position;
+        this.name = "Donald";
+        this.symbol = 'P';
     }
 }
