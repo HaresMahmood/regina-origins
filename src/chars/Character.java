@@ -1,6 +1,4 @@
-package src.chars;
-
-import src.utils.Position;
+package chars;
 
 // Teams is fd for me, you can continue without me
 

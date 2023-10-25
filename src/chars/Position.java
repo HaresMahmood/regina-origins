@@ -1,4 +1,4 @@
-package src.utils;
+package chars;
 
 public class Position {
 
