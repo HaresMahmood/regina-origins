@@ -10,6 +10,10 @@ public class Board {
         this.grid = new IBoardPiece[size][size];
     }
 
+    public void setCell(BoardPosition boardPosition, IBoardPiece boardPiece) {
+        this.grid[boardPosition.getY()][boardPosition.getX()] = boardPiece;
+    }
+
     public void printBoard() {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {

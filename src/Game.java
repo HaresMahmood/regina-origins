@@ -1,6 +1,8 @@
 import java.util.Scanner;
 
 import board.Board;
+import board.BoardPosition;
+import chars.Player;
 
 public class Game {
 
