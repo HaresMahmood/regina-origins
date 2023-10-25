@@ -1,6 +1,6 @@
 package chars;
 
-import utils.BoardPosition;
+import board.BoardPosition;
 
 public interface IBoardPiece {
     BoardPosition getPosition();

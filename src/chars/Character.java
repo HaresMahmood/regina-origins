@@ -1,6 +1,6 @@
 package chars;
 
-import utils.BoardPosition;
+import board.BoardPosition;
 
 // Teams is fd for me, you can continue without me
 
