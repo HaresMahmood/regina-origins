@@ -17,7 +17,23 @@ public class Game {
         while(true){
             board.printBoard();
             System.out.println("Where would you like to move next? (Enter quit to exit): ");
+
             String userInput = scanner.nextLine().toLowerCase();
+            
+            switch (userInput) {
+                case "up":
+
+                    break;
+                case "down":
+
+                    break;
+                case "left":
+
+                    break;
+                case "right":
+
+                    break;
+            }
             
             if(userInput.equals("quit")){
                 break;
