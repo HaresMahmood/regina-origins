@@ -37,18 +37,15 @@ public class Board {
         this.grid = new IBoardPiece[size][size];
     }
 
-<<<<<<< HEAD
     public void setCell(BoardPosition boardPosition, IBoardPiece boardPiece) {
         this.grid[boardPosition.getY()][boardPosition.getX()] = boardPiece;
     }
 
-=======
     /**
      * Prints the current state of the board to the console.
      * Empty spaces are represented by a period (".") character.
      * Non-empty spaces are represented by the symbol of the IBoardPiece occupying the space.
      */
->>>>>>> 21e85e47833fd8767d72defcdd310b96264763fa
     public void printBoard() {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid.length; j++) {
