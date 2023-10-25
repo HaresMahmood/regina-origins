@@ -1,8 +1,9 @@
 package chars;
 
+import utils.BoardPosition;
+
 public interface IBoardPiece {
-
-
-    // BoardPiece (abstract)
-    // Player   Enemies     Treasure
+    BoardPosition getPosition();
+    String getName();
+    char getSymbol();
 }

@@ -15,16 +15,17 @@ public abstract class Character implements IBoardPiece {
     }
 
     // Getters & setters
+    @Override
     public BoardPosition getPosition() {
         return this.position;
     }
 
-
-
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public char getSymbol() {
         return this.symbol;
     }
