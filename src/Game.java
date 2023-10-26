@@ -159,6 +159,7 @@ public class Game {
                             }
                         }
                         System.out.println("The clostest treasure is " + minDist + " distance away!");
+                        System.out.println("There are " + treasures.size() + " treasures left!");
                 }
             } catch (Exception e) {
                 System.out.println(e);
