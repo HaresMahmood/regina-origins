@@ -25,7 +25,7 @@ public class Game {
     }
     */
 
-    public void setup(int treasureCount) {
+    public void setup() {
         printTitleBanner();
 
         Scanner scanner = new Scanner(System.in);
@@ -43,6 +43,21 @@ public class Game {
             } catch (Exception e) {}
 
             System.out.println("Please enter a valid number 3-10");
+        }
+
+        int treasureCount = 0;
+        while (true) {
+            System.out.println("How many treasures should be on the map?");
+            String userInput = scanner.nextLine();
+
+            try {
+                treasureCount = Integer.parseInt(userInput);
+                if (treasureCount > 0 && treasureCount <= size) {
+                    break;
+                }
+            } catch (Exception e) {}
+
+            System.out.println("Please enter a valid number 1-" + size);
         }
 
         this.board = new Board(size);
@@ -184,7 +199,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setup(2);
+        game.setup();
         game.play();
     }
 
