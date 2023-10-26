@@ -88,7 +88,7 @@ public class Board {
                     sj.add("  ");
                 }
             }
-            
+
             sb.append(sj.toString()).append("\n");
             sb.append(lineSplit).append("\n");
         }

@@ -8,8 +8,9 @@ import java.util.List;
 import board.Board;
 import board.BoardPosition;
 import chars.IBoardPiece;
+import chars.NonEnemy;
 import chars.Player;
-import chars.Regina;
+import chars.Enemy;
 import chars.Treasure;
 
 public class Game {
@@ -82,13 +83,21 @@ public class Game {
                 monsterStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(monsterStart));
 
-            this.board.setCell(monsterStart, new Regina(monsterStart));
+            this.board.setCell(monsterStart, new Enemy(monsterStart));
         }
 
-        BoardPosition playerStart;
-        do {
-            playerStart = createRandomPieceStart();
-        } while (!this.board.isCellEmpty(playerStart));
+        int totalNPCs = (int) Math.floor(totalMonsters / 2);
+
+        for (int i = 0; i < totalNPCs; i++) {
+            BoardPosition npcStart;
+            do {
+                npcStart = createRandomPieceStart();
+            } while (!this.board.isCellEmpty(npcStart));
+
+            this.board.setCell(npcStart, new NonEnemy(npcStart));
+        }
+
+        BoardPosition playerStart = createRandomPieceStart();
 
         this.player = new Player(playerStart);
         this.board.setCell(playerStart, this.player);
@@ -125,7 +134,7 @@ public class Game {
 
         if (currentOccupier instanceof Treasure) {
             treasures.remove(currentOccupier);
-        } else if (currentOccupier instanceof Regina) {
+        } else if (currentOccupier instanceof Enemy) {
             this.changeGameStatus(GameStatus.LOSE);
         }
 
