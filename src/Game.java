@@ -8,6 +8,7 @@ import java.util.List;
 import board.Board;
 import board.BoardPosition;
 import chars.IBoardPiece;
+import chars.NPC;
 import chars.NonEnemy;
 import chars.Player;
 import chars.Enemy;
@@ -83,7 +84,7 @@ public class Game {
                 monsterStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(monsterStart));
 
-            this.board.setCell(monsterStart, new Enemy(monsterStart));
+            this.board.setCell(monsterStart, new Enemy(monsterStart, "I'm going to eat your donut!"));
         }
 
         int totalNPCs = (int) Math.floor(totalMonsters / 2);
@@ -94,7 +95,7 @@ public class Game {
                 npcStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(npcStart));
 
-            this.board.setCell(npcStart, new NonEnemy(npcStart));
+            this.board.setCell(npcStart, new NonEnemy(npcStart, "I'm not dangerous!"));
         }
 
         BoardPosition playerStart = createRandomPieceStart();
@@ -134,7 +135,11 @@ public class Game {
 
         if (currentOccupier instanceof Treasure) {
             treasures.remove(currentOccupier);
-        } else if (currentOccupier instanceof Enemy) {
+        } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
+            System.out.println(((NPC)currentOccupier).getMessage());
+        }
+        
+        if (currentOccupier instanceof Enemy) {
             this.changeGameStatus(GameStatus.LOSE);
         }
 

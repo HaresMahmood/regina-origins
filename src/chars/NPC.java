@@ -9,4 +9,8 @@ public abstract class NPC extends Character {
         super(position);
         this.message = message;
     }
+
+    public String getMessage() {
+        return this.message;
+    }
 }
