@@ -18,6 +18,15 @@ public class BoardPosition {
         this.y = y;
     }
 
+    public static double getDistance(BoardPosition pos1, BoardPosition pos2) {
+        return Math.sqrt((pos1.getX() - pos2.getX())^2 + (pos1.getY() - pos2.getY())^2);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.getX() + ", " + this.getY() + ")";
+    }
+
     /**
      * Returns the x coordinate of the position.
      * @return the x coordinate of the position

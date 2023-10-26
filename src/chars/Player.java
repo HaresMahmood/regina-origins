@@ -22,9 +22,8 @@ public class Player extends Character {
      * @param x The x-coordinate of the new position.
      * @param y The y-coordinate of the new position.
      */
-    public void move(int x, int y) {
-        position.setX(x);
-        position.setY(y);
+    public void setPosition(BoardPosition position) {
+        this.position = position;
     }
 
     /**

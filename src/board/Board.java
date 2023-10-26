@@ -42,9 +42,8 @@ public class Board {
     public IBoardPiece setCell(BoardPosition boardPosition, IBoardPiece boardPiece) {
         IBoardPiece currentOccupier = this.grid[boardPosition.getY()][boardPosition.getX()];
 
-        if (currentOccupier == null) {
-            this.grid[boardPosition.getY()][boardPosition.getX()] = boardPiece;
-        }
+        this.grid[boardPosition.getY()][boardPosition.getX()] = boardPiece;
+
         return currentOccupier;
         // do a switch later in Game
     }
