@@ -7,6 +7,7 @@ import board.Board;
 import board.BoardPosition;
 import chars.IBoardPiece;
 import chars.Player;
+import chars.Regina;
 import chars.Treasure;
 
 public class Game {
@@ -45,22 +46,6 @@ public class Game {
 
         this.board = new Board(size);
 
-        // Random rand = new Random();
-
-        // int x = rand.nextInt(0, size);
-        // int y = rand.nextInt(0, size);
-
-        // BoardPosition playerStart = new BoardPosition(x, y);
-        // this.player = new Player(playerStart);
-        // this.board.setCell(this.player.getPosition(), this.player);
-
-        // x = rand.nextInt(0, size);
-        // y = rand.nextInt(0, size);
-
-        // BoardPosition treasureStart = new BoardPosition(x, y);
-        // this.treasure = new Treasure(treasureStart);
-        // this.board.setCell(this.treasure.getPosition(), this.treasure);
-
         BoardPosition playerStart = createRandomPieceStart();
         this.player = new Player(playerStart);
         this.board.setCell(playerStart, this.player);
@@ -68,6 +53,13 @@ public class Game {
         BoardPosition treasureStart = createRandomPieceStart();
         this.treasure = new Treasure(treasureStart);
         this.board.setCell(treasureStart, this.treasure);
+
+        int totalMonsters = (int) Math.ceil((size * size) / 10);
+
+        for (int i = 0; i < totalMonsters; i++) {
+            BoardPosition monsterStart = createRandomPieceStart();
+            this.board.setCell(monsterStart, new Regina(monsterStart));
+        }
 
         this.gameStatus = GameStatus.RUNNING;
     }
@@ -101,6 +93,8 @@ public class Game {
 
             if (currentOccupier instanceof Treasure) {
                 this.changeGameStatus(GameStatus.WIN);
+            } else if (currentOccupier instanceof Regina) {
+                this.changeGameStatus(GameStatus.LOSE);
             }
         } else {
             throw new Exception("Out of bounds!");
