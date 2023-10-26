@@ -1,5 +1,7 @@
 package board;
 
+import java.util.StringJoiner;
+
 import chars.IBoardPiece;
 
  /**  For Lorna:
@@ -56,42 +58,33 @@ public class Board {
         return this.size;
     }
 
+    
     /**
-     * Prints the current state of the board to the console.
-     * Empty spaces are represented by a period (".") character.
-     * Non-empty spaces are represented by the symbol of the IBoardPiece occupying the space.
+     * Prints the current state of the game board to the console.
+     * Each cell of the board is represented by a symbol, and the board is surrounded by a border.
+     * Empty cells are represented by two spaces.
      */
     public void printBoard() {
-        // Prints the top border row
-        System.out.print("╔");
-        for (int x = 0; x < grid.length; x++) {
-            System.out.print("═");
-            if (x == grid.length - 1) {
-                System.out.print("╗\n");
-            }
+        StringBuilder sb = new StringBuilder();
+        String lineSplit = "";
+        StringJoiner splitJoiner = new StringJoiner("+", "|", "|");
+        for (int index = 0; index < grid.length; index++) {
+            splitJoiner.add(String.format("%4s", "").replace(" ", "-"));
         }
-        // Start printing the rows between top and bottom border
-        for (int i = 0; i < grid.length; i++) {
-            // Print the left border
-            System.out.print("║");
-            // Print the grid row
-            for (int j = 0; j < grid.length; j++) {
-                if (grid[i][j] != null) {
-                    System.out.print(grid[i][j].getSymbol());
+        lineSplit = splitJoiner.toString();
+        sb.append(lineSplit).append("\n");
+        for (IBoardPiece[] row : grid) {
+            StringJoiner sj = new StringJoiner(" | ", "| ", " |");
+            for (IBoardPiece piece : row) {
+                if (piece != null) {
+                    sj.add(String.format("%2s", piece.getSymbol()));
                 } else {
-                    System.out.print("+");
+                    sj.add("  ");
                 }
             }
-            // Print the right border
-            System.out.print("║\n");
+            sb.append(sj.toString()).append("\n");
+            sb.append(lineSplit).append("\n");
         }
-        // Prints the bottom border row
-        System.out.print("╚");
-        for (int x = 0; x < grid.length; x++) {
-            System.out.print("═");
-            if (x == grid.length - 1) {
-                System.out.print("╝\n");
-            }
-        }
+        System.out.println(sb.toString());
     }
 }
