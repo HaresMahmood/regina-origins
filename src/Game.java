@@ -17,7 +17,6 @@ public class Game {
     private Board board;
     private Player player;
     private List<Treasure> treasures;
-    private Treasure treasure;
     private GameStatus gameStatus;
 
     /**
@@ -152,9 +151,15 @@ public class Game {
                         moveBoardPiece(this.player, 1, 0);
                         break;
                     case "hint":
-                        System.out.println("The treasure is " +
-                                BoardPosition.getDistance(this.player.getPosition(), this.treasure.getPosition()) +
-                                " distance away!");
+                        double minDist = Double.MAX_VALUE;
+                        for (Treasure treasure : treasures) {
+                            double dist = BoardPosition.getDistance(this.player.getPosition(), treasure.getPosition());
+                            if(dist<minDist){
+                                minDist = dist; // store the new smallest distance
+                            }
+                        }
+                        System.out.println("The clostest treasure is " + minDist + " distance away!");
+                        System.out.println("There are " + treasures.size() + " treasures left!");
                 }
             } catch (Exception e) {
                 System.out.println(e);
