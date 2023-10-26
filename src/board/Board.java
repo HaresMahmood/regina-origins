@@ -25,7 +25,8 @@ import chars.IBoardPiece;
  * </pre>
  */
 public class Board {
-    
+
+    private int size;
     private IBoardPiece[][] grid;
 
     /**
@@ -34,7 +35,8 @@ public class Board {
      * @param size the size of the board
      */
     public Board(int size) {
-        this.grid = new IBoardPiece[size][size];
+        this.size = size;
+        this.grid = new IBoardPiece[this.size][this.size];
     }
 
     public IBoardPiece setCell(BoardPosition boardPosition, IBoardPiece boardPiece) {
@@ -45,6 +47,14 @@ public class Board {
         }
         return currentOccupier;
         // do a switch later in Game
+    }
+
+    public boolean isEmpty (BoardPosition boardPosition) {
+        return this.grid[boardPosition.getY()][boardPosition.getX()] == null;
+    }
+
+    public int getSize() {
+        return this.size;
     }
 
     /**
