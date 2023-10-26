@@ -10,12 +10,38 @@ public class Game {
 
     private Board board;
 
+    /**
     public Game(Board board) {
         this.board = board;
     }
+     */
+
+    public void setup() {
+        printTitleBanner();
+
+        System.out.println("What size of grid do you want?");
+        Scanner scanner = new Scanner(System.in);
+
+        int size = 0;
+        while(true) {
+            String userInput = scanner.nextLine();
+            try {
+                size = Integer.parseInt(userInput);
+                if (size > 2 && size < 11) {
+                    break;
+                } else {
+                    System.out.println("Please enter a valid number 3-10");
+                }
+            } catch (Exception e) {
+                System.out.println("Please enter a valid number!");
+            }
+        }
+
+        this.board = new Board(size);
+    }
 
     public void play(){
-        printTitleBanner();
+
         Scanner scanner = new Scanner(System.in);
         while(true){
             board.printBoard();
@@ -47,7 +73,8 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(new Board(5));
+        Game game = new Game();
+        game.setup();
         game.play();
     }
 
