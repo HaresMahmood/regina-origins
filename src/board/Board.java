@@ -49,7 +49,7 @@ public class Board {
         // do a switch later in Game
     }
 
-    public boolean isEmpty (BoardPosition boardPosition) {
+    public boolean isCellEmpty (BoardPosition boardPosition) {
         return this.grid[boardPosition.getY()][boardPosition.getX()] == null;
     }
 
