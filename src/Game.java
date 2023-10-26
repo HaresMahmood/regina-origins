@@ -147,9 +147,18 @@ public class Game {
                 System.out.println(e);
             }
             
-            if(userInput.equals("quit")){
+            if (userInput.equals("quit")){
                 break;
             }
+        }
+
+        switch (this.gameStatus) {
+            case WIN:
+                printWinImage();
+                break;
+            case LOSE:
+                System.out.println("Sucks to be you");
+                break;
         }
 
         scanner.close();
@@ -161,9 +170,17 @@ public class Game {
         game.play();
     }
 
-    public static void printTitleBanner() {
-        try{
+    public void printTitleBanner() {
+        try {
             System.out.println(new String(Files.readAllBytes(Paths.get("src\\titleBanner.txt"))));
+        } catch(Exception e) {
+            System.out.println("Oh no!\n" + e);
+        }
+    }
+
+    public void printWinImage() {
+        try {
+            System.out.println(new String(Files.readAllBytes(Paths.get("src\\happyDonutMan.txt"))));
         } catch(Exception e) {
             System.out.println("Oh no!\n" + e);
         }
