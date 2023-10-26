@@ -2,6 +2,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.StringJoiner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +137,9 @@ public class Game {
         if (currentOccupier instanceof Treasure) {
             treasures.remove(currentOccupier);
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
-            System.out.println(((NPC)currentOccupier).getMessage());
+            // System.out.println(((NPC)currentOccupier).getMessage());
+
+            printTextBox(currentOccupier);
         }
         
         if (currentOccupier instanceof Enemy) {
@@ -224,6 +227,45 @@ public class Game {
             System.out.println("Oh no!\n" + e);
         }
     }
+
+    private void printTextBox(IBoardPiece boardPiece) {
+        StringBuilder sb = new StringBuilder();
+    
+        String characterName = boardPiece.getName();
+        String message = "This is a very long message, which spans multiple lines. It will be displayed in the message box, even if it is too long to fit on one line.";
+    
+        // Calculate the width of the longest line in the message or the character name, whichever is longer.
+        int maxLineWidth = Math.max(characterName.length() + 4, message.length() + 2);
+    
+        // Append the top border of the message box.
+        sb.append("+--- " + characterName + " ");
+        for (int i = 0; i < maxLineWidth - characterName.length() - 4; i++) {
+            sb.append("-");
+        }
+        sb.append("-+\n");
+    
+        // Split the message into multiple lines, if necessary.
+        String[] messageLines = message.split("\n");
+    
+        // Append each line of the message to the StringBuilder object, with the appropriate padding.
+        for (String messageLine : messageLines) {
+            sb.append("| " + messageLine);
+            for (int i = 0; i < maxLineWidth - messageLine.length() - 2; i++) {
+                sb.append(" ");
+            }
+            sb.append("|\n");
+        }
+    
+        // Append the bottom border of the message box.
+        for (int i = 0; i < maxLineWidth; i++) {
+            sb.append("-");
+        }
+        sb.append("+\n");
+    
+        // Print the output message to the console.
+        System.out.println(sb.toString());
+    }
+       
 
     public void printWinImage() {
         try {
