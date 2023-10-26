@@ -29,62 +29,68 @@ public class Game {
     public void setup(int treasureCount) {
         printTitleBanner();
 
-        System.out.println("What size of grid do you want?");
         Scanner scanner = new Scanner(System.in);
-
         int size = 0;
-        while(true) {
+
+        while (true) {
+            System.out.println("What size of grid do you want?");
             String userInput = scanner.nextLine();
+
             try {
                 size = Integer.parseInt(userInput);
                 if (size > 2 && size < 11) {
                     break;
-                } else {
-                    System.out.println("Please enter a valid number 3-10");
                 }
-            } catch (Exception e) {
-                System.out.println("Please enter a valid number!");
-            }
+            } catch (Exception e) {}
+
+            System.out.println("Please enter a valid number 3-10");
         }
 
         this.board = new Board(size);
-
-        BoardPosition playerStart = createRandomPieceStart();
-        this.player = new Player(playerStart);
-        this.board.setCell(playerStart, this.player);
-
-        // Create treasures
         this.treasures = new ArrayList<>(treasureCount);
 
         for (int i = 0; i < treasureCount; i++) {
-            System.out.println(i);
-            BoardPosition treasureStart = createRandomPieceStart();
+            BoardPosition treasureStart;
+            do {
+                treasureStart = createRandomPieceStart();
+            } while (!this.board.isCellEmpty(treasureStart));
+
             Treasure treasure = new Treasure(treasureStart);
             this.treasures.add(treasure);
             this.board.setCell(treasureStart, treasure);
         }
 
-        // Create monsters
         int totalMonsters = (int) Math.ceil((size * size) / 10);
 
         for (int i = 0; i < totalMonsters; i++) {
-            BoardPosition monsterStart = createRandomPieceStart();
+            BoardPosition monsterStart;
+            do {
+                monsterStart = createRandomPieceStart();
+            } while (!this.board.isCellEmpty(monsterStart));
+
             this.board.setCell(monsterStart, new Regina(monsterStart));
         }
+
+        BoardPosition playerStart;
+        do {
+            playerStart = createRandomPieceStart();
+        } while (!this.board.isCellEmpty(playerStart));
+
+        this.player = new Player(playerStart);
+        this.board.setCell(playerStart, this.player);
 
         this.gameStatus = GameStatus.RUNNING;
     }
 
     private BoardPosition createRandomPieceStart() {
         Random rand = new Random();
-
-        int x = 0;
-        int y = 0;
-        BoardPosition charStart = null;
+        int size = this.board.getSize();
+        int x, y;
+        BoardPosition charStart;
 
         do {
-            x = rand.nextInt(0, this.board.getSize());
-            y = rand.nextInt(0, this.board.getSize());
+            x = rand.nextInt(size);
+            y = rand.nextInt(size);
             charStart = new BoardPosition(x, y);
         } while (!this.board.isCellEmpty(charStart));
 
@@ -95,25 +101,22 @@ public class Game {
         BoardPosition currentPos = this.player.getPosition();
         BoardPosition newPos = new BoardPosition(currentPos.getX() + deltaX, currentPos.getY() + deltaY);
 
-        if (newPos.getX() >= 0 && newPos.getX() < this.board.getSize() &&
-            newPos.getY() >= 0 && newPos.getY() < this.board.getSize()
-        ) {
-            IBoardPiece currentOccupier = this.board.setCell(newPos, boardPiece);
-            this.board.setCell(currentPos, null);
-            this.player.setPosition(newPos);
-
-            if (currentOccupier instanceof Treasure) {
-                treasures.remove(currentOccupier);
-            } 
-            else if (currentOccupier instanceof Regina) {
-                this.changeGameStatus(GameStatus.LOSE);
-            }
-
-            if (treasures.isEmpty()){
-                this.gameStatus = GameStatus.WIN;
-            }
-        } else {
+        if (newPos.getX() < 0 || newPos.getX() >= this.board.getSize() || newPos.getY() < 0 || newPos.getY() >= this.board.getSize()) {
             throw new Exception("Out of bounds!");
+        }
+
+        IBoardPiece currentOccupier = this.board.setCell(newPos, boardPiece);
+        this.board.setCell(currentPos, null);
+        this.player.setPosition(newPos);
+
+        if (currentOccupier instanceof Treasure) {
+            treasures.remove(currentOccupier);
+        } else if (currentOccupier instanceof Regina) {
+            this.changeGameStatus(GameStatus.LOSE);
+        }
+
+        if (treasures.isEmpty()) {
+            this.gameStatus = GameStatus.WIN;
         }
     }
 
