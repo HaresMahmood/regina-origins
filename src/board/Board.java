@@ -47,15 +47,36 @@ public class Board {
      * Non-empty spaces are represented by the symbol of the IBoardPiece occupying the space.
      */
     public void printBoard() {
+        // Prints the top border row
+        System.out.print("╔");
+        for (int x = 0; x < grid.length; x++) {
+            System.out.print("═");
+            if (x == grid.length - 1) {
+                System.out.print("╗\n");
+            }
+        }
+        // Start printing the rows between top and bottom border
         for (int i = 0; i < grid.length; i++) {
+            // Print the left border
+            System.out.print("║");
+            // Print the grid row
             for (int j = 0; j < grid.length; j++) {
                 if (grid[i][j] != null) {
                     System.out.print(grid[i][j].getSymbol());
                 } else {
-                    System.out.print(".");
+                    System.out.print("+");
                 }
             }
-            System.out.print("\n");
+            // Print the right border
+            System.out.print("║\n");
+        }
+        // Prints the bottom border row
+        System.out.print("╚");
+        for (int x = 0; x < grid.length; x++) {
+            System.out.print("═");
+            if (x == grid.length - 1) {
+                System.out.print("╝\n");
+            }
         }
     }
 }
