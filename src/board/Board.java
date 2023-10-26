@@ -37,8 +37,14 @@ public class Board {
         this.grid = new IBoardPiece[size][size];
     }
 
-    public void setCell(BoardPosition boardPosition, IBoardPiece boardPiece) {
-        this.grid[boardPosition.getY()][boardPosition.getX()] = boardPiece;
+    public IBoardPiece setCell(BoardPosition boardPosition, IBoardPiece boardPiece) {
+        IBoardPiece currentOccupier = this.grid[boardPosition.getY()][boardPosition.getX()];
+
+        if (currentOccupier == null) {
+            this.grid[boardPosition.getY()][boardPosition.getX()] = boardPiece;
+        }
+        return currentOccupier;
+        // do a switch later in Game
     }
 
     /**

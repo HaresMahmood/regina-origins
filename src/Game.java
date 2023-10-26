@@ -1,5 +1,6 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
 import java.util.Scanner;
 
 import board.Board;
@@ -9,6 +10,7 @@ import chars.Player;
 public class Game {
 
     private Board board;
+    private Player player;
 
     /**
     public Game(Board board) {
@@ -38,12 +40,21 @@ public class Game {
         }
 
         this.board = new Board(size);
+
+        Random rand = new Random();
+
+        int x = rand.nextInt(0, size);
+        int y = rand.nextInt(0, size);
+
+        BoardPosition playerStart = new BoardPosition(x, y);
+        this.player = new Player(playerStart);
+        this.board.setCell(this.player.getPosition(), this.player);
     }
 
     public void play(){
-
         Scanner scanner = new Scanner(System.in);
-        while(true){
+        // Game loop
+        while (true) {
             board.printBoard();
             System.out.println("Where would you like to move next? (Enter quit to exit): ");
 
