@@ -19,15 +19,6 @@ public class Player extends Character {
 
     /**
      * Moves the player to the specified position on the game board.
-     * @param x The x-coordinate of the new position.
-     * @param y The y-coordinate of the new position.
-     */
-    public void setPosition(BoardPosition position) {
-        this.position = position;
-    }
-
-    /**
-     * Moves the player to the specified position on the game board.
      * @param position The new position of the player.
      */
     public void move(BoardPosition position) {

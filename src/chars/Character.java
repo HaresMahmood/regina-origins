@@ -29,6 +29,15 @@ public abstract class Character implements IBoardPiece {
     }
 
     /**
+     * Moves the player to the specified position on the game board.
+     * @param x The x-coordinate of the new position.
+     * @param y The y-coordinate of the new position.
+     */
+    public void setPosition(BoardPosition position) {
+        this.position = position;
+    }
+
+    /**
      * Getter for the name of the character.
      * @return The name of the character.
      */

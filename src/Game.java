@@ -20,7 +20,7 @@ public class Game {
     public Game(Board board) {
         this.board = board;
     }
-     */
+    */
 
     public void setup() {
         printTitleBanner();
@@ -45,23 +45,47 @@ public class Game {
 
         this.board = new Board(size);
 
-        Random rand = new Random();
+        // Random rand = new Random();
 
-        int x = rand.nextInt(0, size);
-        int y = rand.nextInt(0, size);
+        // int x = rand.nextInt(0, size);
+        // int y = rand.nextInt(0, size);
 
-        BoardPosition playerStart = new BoardPosition(x, y);
+        // BoardPosition playerStart = new BoardPosition(x, y);
+        // this.player = new Player(playerStart);
+        // this.board.setCell(this.player.getPosition(), this.player);
+
+        // x = rand.nextInt(0, size);
+        // y = rand.nextInt(0, size);
+
+        // BoardPosition treasureStart = new BoardPosition(x, y);
+        // this.treasure = new Treasure(treasureStart);
+        // this.board.setCell(this.treasure.getPosition(), this.treasure);
+
+        BoardPosition playerStart = createRandomPieceStart();
         this.player = new Player(playerStart);
-        this.board.setCell(this.player.getPosition(), this.player);
+        this.board.setCell(playerStart, this.player);
 
-        x = rand.nextInt(0, size);
-        y = rand.nextInt(0, size);
-
-        BoardPosition treasureStart = new BoardPosition(x, y);
+        BoardPosition treasureStart = createRandomPieceStart();
         this.treasure = new Treasure(treasureStart);
-        this.board.setCell(this.treasure.getPosition(), this.treasure);
+        this.board.setCell(treasureStart, this.treasure);
 
         this.gameStatus = GameStatus.RUNNING;
+    }
+
+    private BoardPosition createRandomPieceStart() {
+        Random rand = new Random();
+
+        int x = 0;
+        int y = 0;
+        BoardPosition charStart = null;
+
+        do {
+            x = rand.nextInt(0, this.board.getSize());
+            y = rand.nextInt(0, this.board.getSize());
+            charStart = new BoardPosition(x, y);
+        } while (!this.board.isCellEmpty(charStart));
+
+        return charStart;
     }
 
     public void moveBoardPiece(IBoardPiece boardPiece, int deltaX, int deltaY) throws Exception {
@@ -99,15 +123,19 @@ public class Game {
             try {
                 switch (userInput) {
                     case "up":
+                    case "h":
                         moveBoardPiece(this.player, 0, -1);
                         break;
                     case "down":
+                    case "l":
                         moveBoardPiece(this.player, 0, 1);
                         break;
                     case "left":
+                    case "j":
                         moveBoardPiece(this.player, -1, 0);
                         break;
                     case "right":
+                    case "k":
                         moveBoardPiece(this.player, 1, 0);
                         break;
                     case "hint":

@@ -13,6 +13,8 @@ public interface IBoardPiece {
      * @return the position of the board piece
      */
     BoardPosition getPosition();
+
+    void setPosition(BoardPosition position);
     
     /**
      * Returns the name of the board piece.
