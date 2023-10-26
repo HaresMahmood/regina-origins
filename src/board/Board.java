@@ -3,6 +3,7 @@ package board;
 import java.util.StringJoiner;
 
 import chars.IBoardPiece;
+import chars.Player;
 
  /**  For Lorna:
     *     0  1  2  3  4
@@ -68,23 +69,30 @@ public class Board {
         StringBuilder sb = new StringBuilder();
         String lineSplit = "";
         StringJoiner splitJoiner = new StringJoiner("+", "|", "|");
+
         for (int index = 0; index < grid.length; index++) {
             splitJoiner.add(String.format("%4s", "").replace(" ", "-"));
         }
+
         lineSplit = splitJoiner.toString();
         sb.append(lineSplit).append("\n");
+
         for (IBoardPiece[] row : grid) {
             StringJoiner sj = new StringJoiner(" | ", "| ", " |");
             for (IBoardPiece piece : row) {
                 if (piece != null) {
-                    sj.add(String.format("%2s", piece.getSymbol()));
+                    String format = (piece instanceof Player) ? "\u001B[47m\u001B[30m%2s\u001B[0m" : "%2s";
+
+                    sj.add(String.format(format, piece.getSymbol()));
                 } else {
                     sj.add("  ");
                 }
             }
+            
             sb.append(sj.toString()).append("\n");
             sb.append(lineSplit).append("\n");
         }
+
         System.out.println(sb.toString());
     }
 }
