@@ -2,6 +2,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 import board.Board;
 import board.BoardPosition;
@@ -14,6 +16,7 @@ public class Game {
 
     private Board board;
     private Player player;
+    private List<Treasure> treasures;
     private Treasure treasure;
     private GameStatus gameStatus;
 
@@ -23,7 +26,7 @@ public class Game {
     }
     */
 
-    public void setup() {
+    public void setup(int treasureCount) {
         printTitleBanner();
 
         System.out.println("What size of grid do you want?");
@@ -50,10 +53,18 @@ public class Game {
         this.player = new Player(playerStart);
         this.board.setCell(playerStart, this.player);
 
-        BoardPosition treasureStart = createRandomPieceStart();
-        this.treasure = new Treasure(treasureStart);
-        this.board.setCell(treasureStart, this.treasure);
+        // Create treasures
+        this.treasures = new ArrayList<>(treasureCount);
 
+        for (int i = 0; i < treasureCount; i++) {
+            System.out.println(i);
+            BoardPosition treasureStart = createRandomPieceStart();
+            Treasure treasure = new Treasure(treasureStart);
+            this.treasures.add(treasure);
+            this.board.setCell(treasureStart, treasure);
+        }
+
+        // Create monsters
         int totalMonsters = (int) Math.ceil((size * size) / 10);
 
         for (int i = 0; i < totalMonsters; i++) {
@@ -92,9 +103,14 @@ public class Game {
             this.player.setPosition(newPos);
 
             if (currentOccupier instanceof Treasure) {
-                this.changeGameStatus(GameStatus.WIN);
-            } else if (currentOccupier instanceof Regina) {
+                treasures.remove(currentOccupier);
+            } 
+            else if (currentOccupier instanceof Regina) {
                 this.changeGameStatus(GameStatus.LOSE);
+            }
+
+            if (treasures.isEmpty()){
+                this.gameStatus = GameStatus.WIN;
             }
         } else {
             throw new Exception("Out of bounds!");
@@ -160,7 +176,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setup();
+        game.setup(2);
         game.play();
     }
 
