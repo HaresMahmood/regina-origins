@@ -183,6 +183,22 @@ public class Game {
                     case "k":
                         moveBoardPiece(this.player, 1, 0);
                         break;
+                    case "up-left":
+                    case "y":
+                        moveBoardPiece(this.player, -1, -1);
+                        break;
+                    case "up-right":
+                    case "u":
+                        moveBoardPiece(this.player, 1, -1);
+                        break;
+                    case "down-left":
+                    case "i":
+                        moveBoardPiece(this.player, -1, 1);
+                        break;
+                    case "down-right":
+                    case "o":
+                        moveBoardPiece(this.player, 1, 1);
+                        break;
                     case "hint":
                         double minDist = Double.MAX_VALUE;
                         for (Treasure treasure : treasures) {
