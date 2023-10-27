@@ -171,11 +171,14 @@ public class Game {
         }
         
         if (currentOccupier instanceof Enemy) {
-            this.players.remove(this.currentPlayer);
+            this.currentPlayer.died();
             this.board.setCell(this.currentPlayer.getPosition(), currentOccupier);
-            if(this.players.size()==0){
-                this.changeGameStatus(GameStatus.LOSE);
+            for (Player player : players) {
+                if(player.isAlive()){
+                    return;
+                }
             }
+            this.gameStatus = GameStatus.LOSE;
         }
 
         if (treasures.isEmpty()) {
@@ -195,6 +198,10 @@ public class Game {
                 if (this.gameStatus != GameStatus.RUNNING) {
                     break;
                 }
+                if(!player.isAlive()){
+                    continue;
+                }
+
                 this.currentPlayer = player;
                 boolean repeat = true;
 
