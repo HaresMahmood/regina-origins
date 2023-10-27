@@ -181,7 +181,7 @@ public class Game {
         // Game loop
         while (this.gameStatus == GameStatus.RUNNING) {
             board.printBoard();
-            printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right \nHelp: hin \nQuit: qui \n\nTip: you can use also vim keys (h, j, k, l)");
+            printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right \nHelp: hint \nQuit: quit \n\nTip: you can use also vim keys (h, j, k, l)");
 
             String userInput = scanner.nextLine().toLowerCase();
 
