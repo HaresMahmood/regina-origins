@@ -223,7 +223,7 @@ public class Game {
 
                 while (repeat) {
                     repeat = false;
-                    board.printBoard();
+                    board.printBoard(this.currentPlayer);
                     System.out.print("Where would you like to move next? (help/? for help): ");
 
                     String userInput = scanner.nextLine().toLowerCase();

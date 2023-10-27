@@ -65,7 +65,7 @@ public class Board {
      * Each cell of the board is represented by a symbol, and the board is surrounded by a border.
      * Empty cells are represented by two spaces.
      */
-    public void printBoard() {
+    public void printBoard(Player currentPlayer) {
         StringBuilder sb = new StringBuilder();
         String lineSplit = "";
         StringJoiner splitJoiner = new StringJoiner("+", "|", "|");
@@ -82,6 +82,9 @@ public class Board {
             for (IBoardPiece piece : row) {
                 if (piece != null) {
                     String format = (piece instanceof Player) ? "\u001B[47m\u001B[30m%2s\u001B[0m" : "%2s";
+                    if(piece == currentPlayer){
+                        format = "\u001B[46m\u001B[30m%2s\u001B[0m";
+                    }
 
                     sj.add(String.format(format, piece.getSymbol()));
                 } else {
