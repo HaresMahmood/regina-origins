@@ -32,40 +32,33 @@ public class Game {
     }
     */
 
-    public void setup() {
-        printTitleBanner();
-
-        Scanner scanner = new Scanner(System.in);
+    private int parseIntegerInput(Scanner scanner, String message, int min, int max) {
         int size = 0;
 
         while (true) {
-            System.out.println("What size of grid do you want?");
+            System.out.print(message);
             String userInput = scanner.nextLine();
 
             try {
                 size = Integer.parseInt(userInput);
-                if (size > 2 && size < 11) {
+                if (size >= min && size <= max) {
                     break;
                 }
-            } catch (Exception e) {}
+            } catch (NumberFormatException e) {}
 
-            System.out.println("Please enter a valid number 3-10");
+            System.out.println("Please enter a valid number between " + min + "-" + max);
         }
 
-        int treasureCount = 0;
-        while (true) {
-            System.out.println("How many treasures should be on the map?");
-            String userInput = scanner.nextLine();
+        return size;
+    }
 
-            try {
-                treasureCount = Integer.parseInt(userInput);
-                if (treasureCount > 0 && treasureCount <= size) {
-                    break;
-                }
-            } catch (Exception e) {}
+    public void setup() {
+        printTitleBanner();
 
-            System.out.println("Please enter a valid number 1-" + size);
-        }
+        Scanner scanner = new Scanner(System.in);
+
+        int size = parseIntegerInput(scanner, "Grid size: ", 3, 10);
+        int treasureCount = parseIntegerInput(scanner, "Number of treasures: ", 1, size);
 
         this.board = new Board(size);
         this.treasures = new ArrayList<>(treasureCount);
@@ -102,10 +95,10 @@ public class Game {
                 npcStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(npcStart));
 
-            String randomBanter = getRandomBanter(npcBanter);
-            String[] banterParts = randomBanter.split(":");
+            // String randomBanter = getRandomBanter(npcBanter);
+            // String[] banterParts = randomBanter.split(":");
 
-            this.board.setCell(npcStart, new NonEnemy(npcStart, getRandomBanter(npcBanter)));
+            this.board.setCell(npcStart, new NonEnemy(npcStart, "Don", getRandomBanter(npcBanter)));
         }
 
         BoardPosition playerStart = createRandomPieceStart();
@@ -189,7 +182,7 @@ public class Game {
         // Game loop
         while (this.gameStatus == GameStatus.RUNNING) {
             board.printBoard();
-            printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right\nHelp: hint\nQuit: quit\nTip: you can use also vim keys (h, j, k, l)");
+            printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right \nHelp: hin \nQuit: qui \n\nTip: you can use also vim keys (h, j, k, l)");
 
             String userInput = scanner.nextLine().toLowerCase();
 
@@ -235,8 +228,11 @@ public class Game {
                                 minDist = dist; // store the new smallest distance
                             }
                         }
-                        System.out.println("The clostest treasure is " + minDist + " distance away!");
-                        System.out.println("There are " + treasures.size() + " treasures left!");
+                        // System.out.println("The clostest treasure is " + minDist + " distance away!");
+                        // System.out.println("There are " + treasures.size() + " treasures left!");
+
+                        printTextBox("Hint", "The clostest treasure is " + minDist + " distance away!\nThere are " + treasures.size() + " treasures left!");
+                        break;
                 }
             } catch (Exception e) {
                 printTextBox("Invalid move", e.getMessage());
@@ -265,31 +261,44 @@ public class Game {
         game.play();
     }
 
-     /**
-     * +--- Title (can be any length) --------------------------------------------+
-       | This is a test message, which will eventually be replaced by a message   | 
-       | from either an enemy (Regina), or an NPC!                                |  
-       +--------------------------------------------------------------------------+
-     */
     public void printTitleBanner() {
         try {
             System.out.println(new String(Files.readAllBytes(Paths.get("src\\titleBanner.txt"))));
-            printTextBox("Welcome to the game", "Select a size and number of treasures to begin");
+            printTextBox("Welcome to the game!", "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
         } catch(Exception e) {
             System.out.println("Oh no!\n" + e);
         }
     }
 
+    /**
+     * Output:
+     * +--- Title (can be any length) --------------------------------------------+
+     * | This is a test message, which will eventually be replaced by a message   | 
+     * | from either an enemy (Regina), or an NPC!                                |  
+     * +--------------------------------------------------------------------------+
+     * The textbox should dynamically resize to fit the message, and the title
+     */
     private void printTextBox(String title, String message) {
-        List<String[]> rows = new ArrayList<>();
-            rows.add(new String[] { (title + ":") });
-            rows.add(new String[] { 
-                message
-            });
+        int width = Math.max(title.length() + 4, 84);
 
-            Table.table(rows, true, 1, true);
+        // Print the top border of the textbox, with the title embedded.
+        System.out.print("+--- ");
+        System.out.print(title + " ");
+        System.out.print("-".repeat(width - title.length() - 8));
+        System.out.println("---+");
+
+        // Print the message of the textbox.
+        String[] lines = message.split("\\r?\\n");
+        for (String line : lines) {
+            String[] sublines = line.split("(?<=\\G.{80})");
+            for (String subline : sublines) {
+                System.out.println("| " + subline + " ".repeat(width - subline.length() - 2) + " |");
+            }
+        }
+
+        // Print the bottom border of the textbox.
+        System.out.println("+" + "-".repeat(width) + "+");
     }
-       
 
     public void printWinImage() {
         try {
