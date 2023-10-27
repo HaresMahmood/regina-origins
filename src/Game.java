@@ -53,7 +53,9 @@ public class Game {
     }
 
     public void setup() {
-        printTitleBanner();
+        printASCIIArtFIle("src\\titleBanner.txt");
+        printTextBox("Welcome to the game!", "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
+        System.out.println("");
 
         Scanner scanner = new Scanner(System.in);
 
@@ -158,8 +160,7 @@ public class Game {
         if (currentOccupier instanceof Treasure) {
             treasures.remove(currentOccupier);
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
-            // System.out.println(((NPC)currentOccupier).getMessage());
-
+            printASCIIArtFIle("src\\" + ((NPC)currentOccupier).getMugshotFileName());
             printTextBox(currentOccupier.getName(), ((NPC)currentOccupier).getMessage());
         }
         
@@ -266,11 +267,9 @@ public class Game {
         game.play();
     }
 
-    public void printTitleBanner() {
+    private void printASCIIArtFIle(String fileName) {
         try {
-            System.out.println(new String(Files.readAllBytes(Paths.get("src\\titleBanner.txt"))));
-            printTextBox("Welcome to the game!", "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
-            System.out.println("");
+            System.out.println(new String(Files.readAllBytes(Paths.get(fileName))));
         } catch(Exception e) {
             System.out.println("Oh no!\n" + e);
         }

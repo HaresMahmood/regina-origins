@@ -4,6 +4,7 @@ import board.BoardPosition;
 
 public abstract class NPC extends Character {
     protected String message;
+    protected String mugshotFileName;
 
     public NPC(BoardPosition position, String message) {
         super(position);
@@ -12,5 +13,9 @@ public abstract class NPC extends Character {
 
     public String getMessage() {
         return this.message;
+    }
+
+    public String getMugshotFileName() {
+        return this.mugshotFileName;
     }
 }

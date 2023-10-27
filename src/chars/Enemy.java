@@ -8,5 +8,6 @@ public class Enemy extends NPC {
         super(position, message);
         this.name = "Regina";
         this.symbol = 'R';
+        this.mugshotFileName = "reginaMugshot.txt";
     }
 }

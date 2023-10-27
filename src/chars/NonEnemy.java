@@ -11,5 +11,6 @@ public class NonEnemy extends NPC {
         super(position, message);
         this.name = name;
         this.symbol = 'N';
+        this.mugshotFileName = "npcMugshot.txt";
     }
 }
