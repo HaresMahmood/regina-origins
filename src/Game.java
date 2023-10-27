@@ -109,9 +109,9 @@ public class Game {
         this.players = new ArrayList<>();
 
         for (int i = 0; i < playerCount; i++) {
-            System.out.println("What is the name of Player " + (i + 1));
+            System.out.print("Player " + (i + 1) + " name: ");
             String name = scanner.nextLine();
-            System.out.println("What symbol can be used for this player?");
+            System.out.print("Player symbol: ");
             char symbol = scanner.nextLine().charAt(0);
 
             BoardPosition playerStart = createRandomPieceStart();
@@ -174,13 +174,14 @@ public class Game {
 
         if (currentOccupier instanceof Treasure) {
             treasures.remove(currentOccupier);
+            this.currentPlayer.incrementDonuts();
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
             printASCIIArtFIle("src\\" + ((NPC) currentOccupier).getMugshotFileName());
             printTextBox(currentOccupier.getName(), ((NPC) currentOccupier).getMessage());
         }
 
         if (currentOccupier instanceof Enemy) {
-            this.currentPlayer.died();
+            this.currentPlayer.kill();
             this.board.setCell(this.currentPlayer.getPosition(), currentOccupier);
             for (Player player : players) {
                 if (player.isAlive()) {
@@ -214,7 +215,8 @@ public class Game {
                 this.currentPlayer = player;
                 boolean repeat = true;
 
-                System.out.println("------------" + player.getName() + "'s turn!" + "------------");
+                printTextBox("Player " + player.getName() + "'s turn", "You have " + player.getDonuts()
+                        + " donuts in your stash!\nYou are at position " + player.getPosition());
 
                 while (repeat) {
                     repeat = false;
@@ -299,7 +301,6 @@ public class Game {
         }
 
         scanner.close();
-
     }
 
     public static void main(String[] args) {
