@@ -249,7 +249,8 @@ public class Game {
 
         switch (this.gameStatus) {
             case WIN:
-                printWinImage();
+                printASCIIArtFIle("src\\happyDonutMan.txt");
+                printTextBox("You win!", "You collected all the treasures! Congratulations!");
                 break;
             case LOSE:
                 printTextBox("You lose!", "You were attacked by Regina! Better luck next time!");
@@ -303,14 +304,6 @@ public class Game {
 
         // Print the bottom border of the textbox.
         System.out.println("+" + "-".repeat(width) + "+");
-    }
-
-    public void printWinImage() {
-        try {
-            System.out.println(new String(Files.readAllBytes(Paths.get("src\\happyDonutMan.txt"))));
-        } catch(Exception e) {
-            System.out.println("Oh no!\n" + e);
-        }
     }
 
     public enum GameStatus {
