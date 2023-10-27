@@ -22,15 +22,16 @@ import util.Table;
 public class Game {
 
     private Board board;
-    private Player player;
+    private Player currentPlayer;
+    private List<Player> players;
     private List<Treasure> treasures;
     private GameStatus gameStatus;
 
     /**
-    public Game(Board board) {
-        this.board = board;
-    }
-    */
+     * public Game(Board board) {
+     * this.board = board;
+     * }
+     */
 
     private int parseIntegerInput(Scanner scanner, String message, int min, int max) {
         int size = 0;
@@ -44,7 +45,8 @@ public class Game {
                 if (size >= min && size <= max) {
                     break;
                 }
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
 
             System.out.println("Please enter a valid number between " + min + "-" + max);
         }
@@ -54,13 +56,15 @@ public class Game {
 
     public void setup() {
         printASCIIArtFIle("src\\titleBanner.txt");
-        printTextBox("Welcome to the game!", "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
+        printTextBox("Welcome to the game!",
+                "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
         System.out.println("");
 
         Scanner scanner = new Scanner(System.in);
 
         int size = parseIntegerInput(scanner, "Grid size: ", 3, 10);
         int treasureCount = parseIntegerInput(scanner, "Number of treasures: ", 1, size);
+        int playerCount = parseIntegerInput(scanner, "Number of players: ", 1, 4);
 
         this.board = new Board(size);
         this.treasures = new ArrayList<>(treasureCount);
@@ -102,10 +106,20 @@ public class Game {
                     banterAndJob.split(":")[1]));
         }
 
-        BoardPosition playerStart = createRandomPieceStart();
+        this.players = new ArrayList<>();
 
-        this.player = new Player(playerStart);
-        this.board.setCell(playerStart, this.player);
+        for (int i = 0; i < playerCount; i++) {
+            System.out.println("What is the name of Player " + (i + 1));
+            String name = scanner.nextLine();
+            System.out.println("What symbol can be used for this player?");
+            char symbol = scanner.nextLine().charAt(0);
+
+            BoardPosition playerStart = createRandomPieceStart();
+
+            Player newPlayer = new Player(playerStart, name, symbol);
+            players.add(newPlayer);
+            this.board.setCell(playerStart, newPlayer);
+        }
 
         this.gameStatus = GameStatus.RUNNING;
     }
@@ -146,26 +160,34 @@ public class Game {
     }
 
     public void moveBoardPiece(IBoardPiece boardPiece, int deltaX, int deltaY) throws Exception {
-        BoardPosition currentPos = this.player.getPosition();
+        BoardPosition currentPos = this.currentPlayer.getPosition();
         BoardPosition newPos = new BoardPosition(currentPos.getX() + deltaX, currentPos.getY() + deltaY);
 
-        if (newPos.getX() < 0 || newPos.getX() >= this.board.getSize() || newPos.getY() < 0 || newPos.getY() >= this.board.getSize()) {
+        if (newPos.getX() < 0 || newPos.getX() >= this.board.getSize() || newPos.getY() < 0
+                || newPos.getY() >= this.board.getSize()) {
             throw new Exception("Out of bounds, try again");
         }
 
         IBoardPiece currentOccupier = this.board.setCell(newPos, boardPiece);
         this.board.setCell(currentPos, null);
-        this.player.setPosition(newPos);
+        this.currentPlayer.setPosition(newPos);
 
         if (currentOccupier instanceof Treasure) {
             treasures.remove(currentOccupier);
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
-            printASCIIArtFIle("src\\" + ((NPC)currentOccupier).getMugshotFileName());
-            printTextBox(currentOccupier.getName(), ((NPC)currentOccupier).getMessage());
+            printASCIIArtFIle("src\\" + ((NPC) currentOccupier).getMugshotFileName());
+            printTextBox(currentOccupier.getName(), ((NPC) currentOccupier).getMessage());
         }
-        
+
         if (currentOccupier instanceof Enemy) {
-            this.changeGameStatus(GameStatus.LOSE);
+            this.currentPlayer.died();
+            this.board.setCell(this.currentPlayer.getPosition(), currentOccupier);
+            for (Player player : players) {
+                if (player.isAlive()) {
+                    return;
+                }
+            }
+            this.gameStatus = GameStatus.LOSE;
         }
 
         if (treasures.isEmpty()) {
@@ -177,73 +199,90 @@ public class Game {
         this.gameStatus = newStatus;
     }
 
-    public void play(){
+    public void play() {
         Scanner scanner = new Scanner(System.in);
         // Game loop
         while (this.gameStatus == GameStatus.RUNNING) {
-            System.out.println("");
-            board.printBoard();
-            printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right \nHelp: hint \nQuit: quit \n\nTip: you can use also vim keys (h, j, k, l)");
-            System.out.println("");
-
-            String userInput = scanner.nextLine().toLowerCase();
-            System.out.println("");
-
-            try {
-                switch (userInput) {
-                    case "up":
-                    case "h":
-                        moveBoardPiece(this.player, 0, -1);
-                        break;
-                    case "down":
-                    case "l":
-                        moveBoardPiece(this.player, 0, 1);
-                        break;
-                    case "left":
-                    case "j":
-                        moveBoardPiece(this.player, -1, 0);
-                        break;
-                    case "right":
-                    case "k":
-                        moveBoardPiece(this.player, 1, 0);
-                        break;
-                    case "up-left":
-                    case "y":
-                        moveBoardPiece(this.player, -1, -1);
-                        break;
-                    case "up-right":
-                    case "u":
-                        moveBoardPiece(this.player, 1, -1);
-                        break;
-                    case "down-left":
-                    case "i":
-                        moveBoardPiece(this.player, -1, 1);
-                        break;
-                    case "down-right":
-                    case "o":
-                        moveBoardPiece(this.player, 1, 1);
-                        break;
-                    case "hint":
-                        double minDist = Double.MAX_VALUE;
-                        for (Treasure treasure : treasures) {
-                            double dist = BoardPosition.getDistance(this.player.getPosition(), treasure.getPosition());
-                            if(dist<minDist){
-                                minDist = dist; // store the new smallest distance
-                            }
-                        }
-                        // System.out.println("The clostest treasure is " + minDist + " distance away!");
-                        // System.out.println("There are " + treasures.size() + " treasures left!");
-
-                        printTextBox("Hint", "The clostest treasure is " + minDist + " distance away!\nThere are " + treasures.size() + " treasures left!");
-                        break;
+            for (Player player : players) {
+                if (this.gameStatus != GameStatus.RUNNING) {
+                    break;
                 }
-            } catch (Exception e) {
-                printTextBox("Invalid move", e.getMessage());
-            }
-            
-            if (userInput.equals("quit")){
-                printTextBox("Quitting", "Thanks for playing! See you next time!");
-                break;
+                if (!player.isAlive()) {
+                    continue;
+                }
+
+                this.currentPlayer = player;
+                boolean repeat = true;
+
+                System.out.println("------------" + player.getName() + "'s turn!" + "------------");
+
+                while (repeat) {
+                    repeat = false;
+                    board.printBoard();
+                    System.out.println("Where would you like to move next? (Enter quit to exit): ");
+
+                    String userInput = scanner.nextLine().toLowerCase();
+
+                    try {
+                        switch (userInput) {
+                            case "up":
+                            case "h":
+                                moveBoardPiece(this.currentPlayer, 0, -1);
+                                break;
+                            case "down":
+                            case "l":
+                                moveBoardPiece(this.currentPlayer, 0, 1);
+                                break;
+                            case "left":
+                            case "j":
+                                moveBoardPiece(this.currentPlayer, -1, 0);
+                                break;
+                            case "right":
+                            case "k":
+                                moveBoardPiece(this.currentPlayer, 1, 0);
+                                break;
+                            case "up-left":
+                            case "y":
+                                moveBoardPiece(this.currentPlayer, -1, -1);
+                                break;
+                            case "up-right":
+                            case "u":
+                                moveBoardPiece(this.currentPlayer, 1, -1);
+                                break;
+                            case "down-left":
+                            case "i":
+                                moveBoardPiece(this.currentPlayer, -1, 1);
+                                break;
+                            case "down-right":
+                            case "o":
+                                moveBoardPiece(this.currentPlayer, 1, 1);
+                                break;
+                            case "hint":
+                                double minDist = Double.MAX_VALUE;
+                                for (Treasure treasure : treasures) {
+                                    double dist = BoardPosition.getDistance(this.currentPlayer.getPosition(),
+                                            treasure.getPosition());
+                                    if (dist < minDist) {
+                                        minDist = dist; // store the new smallest distance
+                                    }
+                                }
+                                printTextBox("Hint", "The clostest treasure is " + minDist
+                                        + " distance away!\nThere are " + treasures.size() + " treasures left!");
+                                break;
+                            default:
+                                System.out.println("That is not a valid instruction!");
+                                repeat = true;
+                                break;
+                        }
+                    } catch (Exception e) {
+                        printTextBox("Invalid move", e.getMessage());
+                        repeat = true;
+                    }
+
+                    if (userInput.equals("quit")) {
+                        break;
+                    }
+                }
             }
         }
 
@@ -260,6 +299,7 @@ public class Game {
         }
 
         scanner.close();
+
     }
 
     public static void main(String[] args) {
@@ -271,7 +311,7 @@ public class Game {
     private void printASCIIArtFIle(String fileName) {
         try {
             System.out.println(new String(Files.readAllBytes(Paths.get(fileName))));
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Oh no!\n" + e);
         }
     }
@@ -279,8 +319,8 @@ public class Game {
     /**
      * Output:
      * +--- Title (can be any length) --------------------------------------------+
-     * | This is a test message, which will eventually be replaced by a message   | 
-     * | from either an enemy (Regina), or an NPC!                                |  
+     * | This is a test message, which will eventually be replaced by a message |
+     * | from either an enemy (Regina), or an NPC! |
      * +--------------------------------------------------------------------------+
      * The textbox should dynamically resize to fit the message, and the title
      */
