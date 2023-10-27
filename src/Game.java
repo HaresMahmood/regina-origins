@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -79,6 +82,7 @@ public class Game {
         }
 
         int totalMonsters = (int) Math.ceil((size * size) / 10);
+        ArrayList<String> reginaBanter = getBanterFromFile("src\\reginaBanter.txt");
 
         for (int i = 0; i < totalMonsters; i++) {
             BoardPosition monsterStart;
@@ -86,10 +90,11 @@ public class Game {
                 monsterStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(monsterStart));
 
-            this.board.setCell(monsterStart, new Enemy(monsterStart, "I'm going to eat your donut!"));
+            this.board.setCell(monsterStart, new Enemy(monsterStart, getRandomBanter(reginaBanter)));
         }
 
         int totalNPCs = (int) Math.floor(totalMonsters / 2);
+        ArrayList<String> npcBanter = getBanterFromFile("src\\reginaBanter.txt");
 
         for (int i = 0; i < totalNPCs; i++) {
             BoardPosition npcStart;
@@ -97,7 +102,7 @@ public class Game {
                 npcStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(npcStart));
 
-            this.board.setCell(npcStart, new NonEnemy(npcStart, "I'm not dangerous!"));
+            this.board.setCell(npcStart, new NonEnemy(npcStart, getRandomBanter(npcBanter)));
         }
 
         BoardPosition playerStart = createRandomPieceStart();
@@ -123,12 +128,32 @@ public class Game {
         return charStart;
     }
 
+    private ArrayList<String> getBanterFromFile(String fileName) {
+        ArrayList<String> banter = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                banter.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return banter;
+    }
+
+    private String getRandomBanter(ArrayList<String> banter) {
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(banter.size());
+        return banter.get(randomIndex);
+    }
+
     public void moveBoardPiece(IBoardPiece boardPiece, int deltaX, int deltaY) throws Exception {
         BoardPosition currentPos = this.player.getPosition();
         BoardPosition newPos = new BoardPosition(currentPos.getX() + deltaX, currentPos.getY() + deltaY);
 
         if (newPos.getX() < 0 || newPos.getX() >= this.board.getSize() || newPos.getY() < 0 || newPos.getY() >= this.board.getSize()) {
-            throw new Exception("Out of bounds!");
+            throw new Exception("Out of bounds, try again");
         }
 
         IBoardPiece currentOccupier = this.board.setCell(newPos, boardPiece);
@@ -140,7 +165,7 @@ public class Game {
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
             // System.out.println(((NPC)currentOccupier).getMessage());
 
-            printTextBox(currentOccupier);
+            printTextBox(currentOccupier.getName(), ((NPC)currentOccupier).getMessage());
         }
         
         if (currentOccupier instanceof Enemy) {
@@ -161,7 +186,7 @@ public class Game {
         // Game loop
         while (this.gameStatus == GameStatus.RUNNING) {
             board.printBoard();
-            System.out.println("Where would you like to move next? (Enter quit to exit): ");
+            printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right\nHelp: hint\nQuit: quit\nTip: you can use also vim keys (h, j, k, l)");
 
             String userInput = scanner.nextLine().toLowerCase();
 
@@ -211,7 +236,7 @@ public class Game {
                         System.out.println("There are " + treasures.size() + " treasures left!");
                 }
             } catch (Exception e) {
-                System.out.println(e);
+                printTextBox("Invalid move", e.getMessage());
             }
             
             if (userInput.equals("quit")){
@@ -237,58 +262,26 @@ public class Game {
         game.play();
     }
 
+     /**
+     * +--- Title (can be any length) --------------------------------------------+
+       | This is a test message, which will eventually be replaced by a message   | 
+       | from either an enemy (Regina), or an NPC!                                |  
+       +--------------------------------------------------------------------------+
+     */
     public void printTitleBanner() {
         try {
             System.out.println(new String(Files.readAllBytes(Paths.get("src\\titleBanner.txt"))));
+            printTextBox("Welcome to the game", "Select a size and number of treasures to begin");
         } catch(Exception e) {
             System.out.println("Oh no!\n" + e);
         }
     }
 
-    // private void printTextBox(IBoardPiece boardPiece) {
-    //     StringBuilder sb = new StringBuilder();
-    
-    //     String characterName = boardPiece.getName();
-    //     String message = "This is a very long message, which spans multiple lines. It will be displayed in the message box, even if it is too long to fit on one line.";
-    
-    //     // Calculate the width of the longest line in the message or the character name, whichever is longer.
-    //     int maxLineWidth = Math.max(characterName.length() + 4, message.length() + 2);
-    
-    //     // Append the top border of the message box.
-    //     sb.append("+--- " + characterName + " ");
-    //     for (int i = 0; i < maxLineWidth - characterName.length() - 4; i++) {
-    //         sb.append("-");
-    //     }
-    //     sb.append("-+\n");
-    
-    //     // Split the message into multiple lines, if necessary.
-    //     String[] messageLines = message.split("\n");
-    
-    //     // Append each line of the message to the StringBuilder object, with the appropriate padding.
-    //     for (String messageLine : messageLines) {
-    //         sb.append("| " + messageLine);
-    //         for (int i = 0; i < maxLineWidth - messageLine.length() - 2; i++) {
-    //             sb.append(" ");
-    //         }
-    //         sb.append("|\n");
-    //     }
-    
-    //     // Append the bottom border of the message box.
-    //     for (int i = 0; i < maxLineWidth; i++) {
-    //         sb.append("-");
-    //     }
-    //     sb.append("+\n");
-    
-    //     // Print the output message to the console.
-    //     System.out.println(sb.toString());
-    // }
-
-    private void printTextBox(IBoardPiece boardPiece) {
+    private void printTextBox(String title, String message) {
         List<String[]> rows = new ArrayList<>();
-            rows.add(new String[] { (boardPiece.getName() + ":") });
+            rows.add(new String[] { (title + ":") });
             rows.add(new String[] { 
-                // "/\\ /\n((ovo))\n():::()\n  VVV",
-                "This is a test message, which will eventually be replaced by a message from either an enemy (Regina), or an NPC!" 
+                message
             });
 
             Table.table(rows, true, 1, true);
