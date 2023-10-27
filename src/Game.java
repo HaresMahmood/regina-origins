@@ -224,9 +224,10 @@ public class Game {
                 while (repeat) {
                     repeat = false;
                     board.printBoard();
-                    System.out.println("Where would you like to move next? (Enter quit to exit): ");
+                    System.out.print("Where would you like to move next? (help/? for help): ");
 
                     String userInput = scanner.nextLine().toLowerCase();
+                    System.out.println("");
 
                     try {
                         switch (userInput) {
@@ -263,6 +264,7 @@ public class Game {
                                 moveBoardPiece(this.currentPlayer, 1, 1);
                                 break;
                             case "hint":
+                            case "hi":
                                 double minDist = Double.MAX_VALUE;
                                 for (Treasure treasure : treasures) {
                                     double dist = BoardPosition.getDistance(this.currentPlayer.getPosition(),
@@ -273,9 +275,17 @@ public class Game {
                                 }
                                 printTextBox("Hint", "The clostest treasure is " + minDist
                                         + " distance away!\nThere are " + treasures.size() + " treasures left!");
+                                System.out.println("");
+                                repeat = true;
+                                break;
+                            case "help":
+                            case "?":
+                                printTextBox("Help", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right \nHelp: hint \nQuit: quit \n\nTip: you can use also vim keys (h, j, k, l)");
+                                System.out.println("");
+                                repeat = true;
                                 break;
                             default:
-                                System.out.println("That is not a valid instruction!");
+                                System.out.println("That is not a valid instruction (help/? for help)");
                                 repeat = true;
                                 break;
                         }
