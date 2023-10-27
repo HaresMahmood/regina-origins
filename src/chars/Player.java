@@ -18,6 +18,19 @@ public class Player extends Character {
     }
 
     /**
+     * Constructor for creating a new Player object.
+     * @param position The initial position of the player on the game board.
+     * @param name The name of the player
+     * @param symbol The symbol to show the player on the board
+     */
+    public Player(BoardPosition position, String name, char symbol) {
+        super(position);
+        this.name = name;
+        this.symbol = symbol;
+    }
+    
+
+    /**
      * Moves the player to the specified position on the game board.
      * @param position The new position of the player.
      */
