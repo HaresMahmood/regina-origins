@@ -120,6 +120,8 @@ public class Game {
             players.add(newPlayer);
             this.board.setCell(playerStart, newPlayer);
         }
+        
+        System.out.println("");
 
         this.gameStatus = GameStatus.RUNNING;
     }
