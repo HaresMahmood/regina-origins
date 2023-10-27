@@ -10,7 +10,6 @@ public class NonEnemy extends NPC {
     public NonEnemy(BoardPosition position, String name, String message) {
         super(position, message);
         this.name = name;
-        this.symbol = 'N';
         this.mugshotFileName = "npcMugshot.txt";
     }
 }

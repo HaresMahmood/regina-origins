@@ -17,6 +17,7 @@ public abstract class Character implements IBoardPiece {
      */
     public Character(BoardPosition position) {
         this.position = position;
+        this.symbol = '?';
     }
 
     /**

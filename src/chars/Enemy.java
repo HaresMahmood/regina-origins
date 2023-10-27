@@ -7,7 +7,6 @@ public class Enemy extends NPC {
     public Enemy(BoardPosition position, String message) {
         super(position, message);
         this.name = "Regina";
-        this.symbol = 'R';
         this.mugshotFileName = "reginaMugshot.txt";
     }
 }
