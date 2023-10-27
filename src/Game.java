@@ -94,7 +94,7 @@ public class Game {
         }
 
         int totalNPCs = (int) Math.floor(totalMonsters / 2);
-        ArrayList<String> npcBanter = getBanterFromFile("src\\reginaBanter.txt");
+        ArrayList<String> npcBanter = getBanterFromFile("src\\npcJobsAndBanter.txt");
 
         for (int i = 0; i < totalNPCs; i++) {
             BoardPosition npcStart;
@@ -102,10 +102,8 @@ public class Game {
                 npcStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(npcStart));
 
-            String randomBanter = getRandomBanter(npcBanter);
-            String[] banterParts = randomBanter.split(":");
-
-            this.board.setCell(npcStart, new NonEnemy(npcStart, getRandomBanter(npcBanter)));
+            String[] banterAndJob = getRandomBanterAndJob(npcBanter);
+            this.board.setCell(npcStart, new NonEnemy(npcStart, banterAndJob[0], banterAndJob[1]));
         }
 
         BoardPosition playerStart = createRandomPieceStart();
@@ -149,6 +147,11 @@ public class Game {
         Random rand = new Random();
         int randomIndex = rand.nextInt(banter.size());
         return banter.get(randomIndex);
+    }
+
+    private String[] getRandomBanterAndJob(ArrayList<String> banterAndJobs) {
+        String banterAndJob = getRandomBanter(banterAndJobs);
+        return new String[]{banterAndJob.split(":")[0], banterAndJob.split(":")[1]};
     }
 
     public void moveBoardPiece(IBoardPiece boardPiece, int deltaX, int deltaY) throws Exception {
