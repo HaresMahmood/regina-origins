@@ -219,6 +219,7 @@ public class Game {
 
                 printTextBox("Player " + player.getName() + "'s turn", "You have " + player.getDonuts()
                         + " donuts in your stash!\nYou are at position " + player.getPosition());
+                System.out.println("");
 
                 while (repeat) {
                     repeat = false;
