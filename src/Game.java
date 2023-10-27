@@ -102,8 +102,9 @@ public class Game {
                 npcStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(npcStart));
 
-            String[] banterAndJob = getRandomBanterAndJob(npcBanter);
-            this.board.setCell(npcStart, new NonEnemy(npcStart, banterAndJob[0], banterAndJob[1]));
+            String banterAndJob = getRandomBanter(npcBanter);
+            this.board.setCell(npcStart, new NonEnemy(npcStart, banterAndJob.split(":")[0],
+                    banterAndJob.split(":")[1]));
         }
 
         BoardPosition playerStart = createRandomPieceStart();
@@ -147,11 +148,6 @@ public class Game {
         Random rand = new Random();
         int randomIndex = rand.nextInt(banter.size());
         return banter.get(randomIndex);
-    }
-
-    private String[] getRandomBanterAndJob(ArrayList<String> banterAndJobs) {
-        String banterAndJob = getRandomBanter(banterAndJobs);
-        return new String[]{banterAndJob.split(":")[0], banterAndJob.split(":")[1]};
     }
 
     public void moveBoardPiece(IBoardPiece boardPiece, int deltaX, int deltaY) throws Exception {
