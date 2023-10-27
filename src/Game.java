@@ -102,6 +102,9 @@ public class Game {
                 npcStart = createRandomPieceStart();
             } while (!this.board.isCellEmpty(npcStart));
 
+            String randomBanter = getRandomBanter(npcBanter);
+            String[] banterParts = randomBanter.split(":");
+
             this.board.setCell(npcStart, new NonEnemy(npcStart, getRandomBanter(npcBanter)));
         }
 
