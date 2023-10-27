@@ -180,10 +180,13 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
         // Game loop
         while (this.gameStatus == GameStatus.RUNNING) {
+            System.out.println("");
             board.printBoard();
             printTextBox("Enter your next move", "Valid moves: up, down, left, right, up-left, up-right, down-left, down-right \nHelp: hint \nQuit: quit \n\nTip: you can use also vim keys (h, j, k, l)");
+            System.out.println("");
 
             String userInput = scanner.nextLine().toLowerCase();
+            System.out.println("");
 
             try {
                 switch (userInput) {
@@ -238,6 +241,7 @@ public class Game {
             }
             
             if (userInput.equals("quit")){
+                printTextBox("Quitting", "Thanks for playing! See you next time!");
                 break;
             }
         }
@@ -247,7 +251,9 @@ public class Game {
                 printWinImage();
                 break;
             case LOSE:
-                System.out.println("Sucks to be you");
+                printTextBox("You lose!", "You were attacked by Regina! Better luck next time!");
+                break;
+            default:
                 break;
         }
 
@@ -264,6 +270,7 @@ public class Game {
         try {
             System.out.println(new String(Files.readAllBytes(Paths.get("src\\titleBanner.txt"))));
             printTextBox("Welcome to the game!", "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
+            System.out.println("");
         } catch(Exception e) {
             System.out.println("Oh no!\n" + e);
         }
