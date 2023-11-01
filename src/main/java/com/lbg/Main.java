@@ -58,6 +58,7 @@ public class Main {
 
     public void setup() {
         printASCIIArtFile("titleBanner.txt");
+        System.out.println("");
         printTextBox("Welcome to the game!",
                 "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
         System.out.println("");
