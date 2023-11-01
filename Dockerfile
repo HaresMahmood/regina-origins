@@ -4,6 +4,9 @@ FROM maven:3.8.5-openjdk-17-slim
 # Set the working directory to /app
 WORKDIR /app
 
+# Set the classpath environment variable
+ENV CLASSPATH /app/target/classes:/app/target/dependency/*
+
 # Copy the pom.xml file to the container at /app
 COPY pom.xml .
 
