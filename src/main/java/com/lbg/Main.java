@@ -3,6 +3,8 @@ package com.lbg;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -55,7 +57,7 @@ public class Main {
     }
 
     public void setup() {
-        printASCIIArtFIle("src\\main\\res\\titleBanner.txt");
+        printASCIIArtFile("titleBanner.txt");
         printTextBox("Welcome to the game!",
                 "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
         System.out.println("");
@@ -178,7 +180,7 @@ public class Main {
             treasures.remove(currentOccupier);
             this.currentPlayer.incrementDonuts();
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
-            printASCIIArtFIle("src\\main\\res\\" + ((NPC) currentOccupier).getMugshotFileName());
+            printASCIIArtFile(((NPC) currentOccupier).getMugshotFileName());
             printTextBox(currentOccupier.getName(), ((NPC) currentOccupier).getMessage());
         }
 
@@ -303,7 +305,7 @@ public class Main {
 
         switch (this.gameStatus) {
             case WIN:
-                printASCIIArtFIle("src\\main\\res\\happyDonutMan.txt");
+                printASCIIArtFile("happyDonutMan.txt");
                 printTextBox("You win!", "You collected all the treasures! Congratulations!");
                 break;
             case LOSE:
@@ -322,10 +324,18 @@ public class Main {
         game.play();
     }
 
-    private void printASCIIArtFIle(String fileName) {
-        try {
-            System.out.println(new String(Files.readAllBytes(Paths.get(fileName))));
-        } catch (Exception e) {
+    private void printASCIIArtFile(String fileName) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/res/" + fileName)) {
+            if (inputStream == null) {
+                System.out.println("File not found: " + fileName);
+                return;
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
             System.out.println("Oh no!\n" + e);
         }
     }

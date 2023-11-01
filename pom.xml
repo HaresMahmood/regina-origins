@@ -32,6 +32,9 @@
       <resource>
         <directory>src/main/res</directory>
         <!-- <filtering>true</filtering> -->
+        <includes>
+          <include>**/*</include>
+        </includes>
       </resource>
     </resources>
 
