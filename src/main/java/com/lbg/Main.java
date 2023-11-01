@@ -188,6 +188,7 @@ public class Main {
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
             printASCIIArtFile(((NPC) currentOccupier).getMugshotFileName());
             printTextBox(currentOccupier.getName(), ((NPC) currentOccupier).getMessage());
+            System.out.println("");
         }
 
         if (currentOccupier instanceof Enemy) {
