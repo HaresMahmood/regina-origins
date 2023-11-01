@@ -325,7 +325,7 @@ public class Main {
     }
 
     private void printASCIIArtFile(String fileName) {
-        try (InputStream inputStream = getClass().getResourceAsStream("/res/" + fileName)) {
+        try (InputStream inputStream = getClass().getResourceAsStream(fileName)) {
             if (inputStream == null) {
                 System.out.println("File not found: " + fileName);
                 return;
