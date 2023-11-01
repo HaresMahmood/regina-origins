@@ -4,9 +4,6 @@ FROM maven:3.8.5-openjdk-17-slim
 # Set the working directory to /app
 WORKDIR /app
 
-# Set the classpath environment variable
-ENV CLASSPATH=$CLASSPATH:/app/target/regina-origins-1.0.jar
-
 # Copy the pom.xml file to the container at /app
 COPY pom.xml .
 
@@ -20,4 +17,4 @@ COPY . .
 RUN mvn package
 
 # Set the default command to run the built jar file
-CMD ["java", "-jar", "target/regina-origins-1.0.jar"]
+CMD ["java", "-cp", "target/regina-origins-1.0.jar:target/lib/*", "com.example.Main"]
