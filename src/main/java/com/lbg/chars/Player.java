@@ -1,6 +1,6 @@
-package chars;
+package com.lbg.chars;
 
-import board.BoardPosition;
+import com.lbg.board.BoardPosition;
 
 /**
  * The Player class represents a player character in the game.

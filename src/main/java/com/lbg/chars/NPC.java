@@ -1,6 +1,6 @@
-package chars;
+package com.lbg.chars;
 
-import board.BoardPosition;
+import com.lbg.board.BoardPosition;
 
 public abstract class NPC extends Character {
     protected String message;

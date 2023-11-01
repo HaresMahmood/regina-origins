@@ -1,6 +1,6 @@
-package chars;
+package com.lbg.chars;
 
-import board.BoardPosition;
+import com.lbg.board.BoardPosition;
 
 /**
  * Treasure class represents a character in the game that holds a donut stash.

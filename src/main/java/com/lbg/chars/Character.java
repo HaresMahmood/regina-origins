@@ -1,6 +1,6 @@
-package chars;
+package com.lbg.chars;
 
-import board.BoardPosition;
+import com.lbg.board.BoardPosition;
 
 /**
  * An abstract class representing a character on the game board.

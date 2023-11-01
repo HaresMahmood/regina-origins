@@ -1,3 +1,5 @@
+package com.lbg;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -5,21 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.StringJoiner;
 import java.util.ArrayList;
 import java.util.List;
 
-import board.Board;
-import board.BoardPosition;
-import chars.IBoardPiece;
-import chars.NPC;
-import chars.NonEnemy;
-import chars.Player;
-import chars.Enemy;
-import chars.Treasure;
-import util.Table;
+import com.lbg.board.Board;
+import com.lbg.board.BoardPosition;
+import com.lbg.chars.IBoardPiece;
+import com.lbg.chars.NPC;
+import com.lbg.chars.NonEnemy;
+import com.lbg.chars.Player;
+import com.lbg.chars.Enemy;
+import com.lbg.chars.Treasure;
 
-public class Game {
+public class Main {
 
     private Board board;
     private Player currentPlayer;
@@ -55,7 +55,7 @@ public class Game {
     }
 
     public void setup() {
-        printASCIIArtFIle("src\\titleBanner.txt");
+        printASCIIArtFIle("src\\main\\res\\titleBanner.txt");
         printTextBox("Welcome to the game!",
                 "Select a size and number of treasures to begin... Here's a slightly longer message. And here's an even longer one");
         System.out.println("");
@@ -81,7 +81,7 @@ public class Game {
         }
 
         int totalMonsters = (int) Math.ceil((size * size) / 10);
-        ArrayList<String> reginaBanter = getBanterFromFile("src\\reginaBanter.txt");
+        ArrayList<String> reginaBanter = getBanterFromFile("src\\main\\res\\reginaBanter.txt");
 
         for (int i = 0; i < totalMonsters; i++) {
             BoardPosition monsterStart;
@@ -93,7 +93,7 @@ public class Game {
         }
 
         int totalNPCs = (int) Math.floor(totalMonsters / 2);
-        ArrayList<String> npcBanter = getBanterFromFile("src\\npcJobsAndBanter.txt");
+        ArrayList<String> npcBanter = getBanterFromFile("src\\main\\res\\npcJobsAndBanter.txt");
 
         for (int i = 0; i < totalNPCs; i++) {
             BoardPosition npcStart;
@@ -178,7 +178,7 @@ public class Game {
             treasures.remove(currentOccupier);
             this.currentPlayer.incrementDonuts();
         } else if (currentOccupier instanceof Enemy || currentOccupier instanceof NonEnemy) {
-            printASCIIArtFIle("src\\" + ((NPC) currentOccupier).getMugshotFileName());
+            printASCIIArtFIle("src\\main\\res\\" + ((NPC) currentOccupier).getMugshotFileName());
             printTextBox(currentOccupier.getName(), ((NPC) currentOccupier).getMessage());
         }
 
@@ -303,7 +303,7 @@ public class Game {
 
         switch (this.gameStatus) {
             case WIN:
-                printASCIIArtFIle("src\\happyDonutMan.txt");
+                printASCIIArtFIle("src\\main\\res\\happyDonutMan.txt");
                 printTextBox("You win!", "You collected all the treasures! Congratulations!");
                 break;
             case LOSE:
@@ -317,7 +317,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
+        Main game = new Main();
         game.setup();
         game.play();
     }

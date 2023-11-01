@@ -1,6 +1,6 @@
-package chars;
+package com.lbg.chars;
 
-import board.BoardPosition;
+import com.lbg.board.BoardPosition;
 
 /**
  * The IBoardPiece interface represents a game piece on a board.

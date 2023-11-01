@@ -1,9 +1,9 @@
-package board;
+package com.lbg.board;
 
 import java.util.StringJoiner;
 
-import chars.IBoardPiece;
-import chars.Player;
+import com.lbg.chars.IBoardPiece;
+import com.lbg.chars.Player;
 
  /**  For Lorna:
     *     0  1  2  3  4

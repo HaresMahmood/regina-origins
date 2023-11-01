@@ -1,4 +1,4 @@
-package board;
+package com.lbg.board;
 
 /**
  * Represents a position on a game board with an x and y coordinate.
