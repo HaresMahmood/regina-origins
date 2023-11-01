@@ -83,7 +83,7 @@ public class Main {
         }
 
         int totalMonsters = (int) Math.ceil((size * size) / 10);
-        ArrayList<String> reginaBanter = getBanterFromFile("src\\main\\res\\reginaBanter.txt");
+        ArrayList<String> reginaBanter = getBanterFromFile("reginaBanter.txt");
 
         for (int i = 0; i < totalMonsters; i++) {
             BoardPosition monsterStart;
@@ -95,7 +95,7 @@ public class Main {
         }
 
         int totalNPCs = (int) Math.floor(totalMonsters / 2);
-        ArrayList<String> npcBanter = getBanterFromFile("src\\main\\res\\npcJobsAndBanter.txt");
+        ArrayList<String> npcBanter = getBanterFromFile("npcJobsAndBanter.txt");
 
         for (int i = 0; i < totalNPCs; i++) {
             BoardPosition npcStart;
@@ -145,7 +145,12 @@ public class Main {
 
     private ArrayList<String> getBanterFromFile(String fileName) {
         ArrayList<String> banter = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/" + fileName)) {
+            if (inputStream == null) {
+                System.out.println("File not found: " + fileName);
+                return banter;
+            }
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while ((line = reader.readLine()) != null) {
                 banter.add(line);
