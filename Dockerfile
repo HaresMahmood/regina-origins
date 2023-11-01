@@ -1,15 +1,23 @@
-
-# Use an official Java runtime as a parent image
-FROM eclipse-temurin:17-alpine
+# Use an official Maven image as a parent image
+FROM maven:3.8.5-openjdk-17-slim
 
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the pom.xml file to the container at /app
+COPY pom.xml .
 
-# Compile the Java application
-RUN javac Game.java
+# Extract the application name from the pom.xml file and set it as an environment variable
+RUN export APP_NAME=$(xmlstarlet sel -t -v '//artifactId' pom.xml)
 
-# Set the default command to run the Java application
-CMD ["java", "Game"]
+# Download the dependencies specified in the pom.xml file
+RUN mvn dependency:go-offline
+
+# Copy the rest of the project files to the container at /app
+COPY . .
+
+# Build the Maven project
+RUN mvn package
+
+# Set the default command to run the built jar file
+CMD ["java", "-jar", "target/${APP_NAME}.jar"]
