@@ -4,10 +4,10 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY . .
-RUN mvn package
+RUN mvn package && rm -rf target/src
 
 # Runtime stage
-FROM openjdk:17-slim
+FROM bellsoft:liberica-17-jre-alpine
 COPY --from=build /app/target/regina-origins-1.0.jar /app/target/lib/* /app/
 CMD ["java", "-cp", "/app/regina-origins-1.0.jar:/app/lib/*", "com.lbg.Main"]
 
