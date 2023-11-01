@@ -7,7 +7,7 @@ COPY . .
 RUN mvn package && rm -rf target/src
 
 # Runtime stage
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-alpine3.14
 COPY --from=build /app/target/regina-origins-1.0.jar /app/target/lib/* /app/
 CMD ["java", "-cp", "/app/regina-origins-1.0.jar:/app/lib/*", "com.lbg.Main"]
 
