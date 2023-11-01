@@ -17,4 +17,4 @@ COPY . .
 RUN mvn package
 
 # Set the default command to run the built jar file
-CMD ["java", "-cp", "target/regina-origins-1.0.jar:target/lib/*", "org.lbg.Main"]
+CMD ["java", "-cp", "target/regina-origins-1.0.jar:target/lib/*", "com.lbg.Main"]
