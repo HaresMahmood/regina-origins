@@ -19,7 +19,7 @@ public class BoardPosition {
     }
 
     public static double getDistance(BoardPosition pos1, BoardPosition pos2) {
-        return Math.sqrt((pos1.getX() - pos2.getX())^2 + (pos1.getY() - pos2.getY())^2);
+        return Math.sqrt(Math.pow(pos1.getX() - pos2.getX(),2) + Math.pow(pos1.getY() - pos2.getY(), 2));
     }
 
     @Override
